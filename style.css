@@ -1,0 +1,25 @@
+body{
+    display: flex;
+  flex-direction: column;
+    align-items: center;
+}
+
+canvas{
+    background-color: black;
+   
+}
+
+.tutorialContainer{
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.tutorialDiv{
+  margin: 5px;
+  border: 3px solid black;
+  border-color: sandybrown;
+  padding: 10px;
+}
