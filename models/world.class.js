@@ -52,13 +52,10 @@ class World {
         }, 1000);
     }
 
-    checkCollectingCoin(){
-        this.level.coins.forEach(coin) => {
-            if(this.character.isCollecting(coin)) {
-                this.inventory.
-            }
-        };
-    }
+    
+
+
+ 
 
 
 
