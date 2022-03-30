@@ -1,4 +1,5 @@
-class CollectableObject extends MovableObject{
+class CollectableObject extends MovableObject {
+
     CoinsCollection = [];
 
    //collecting Coin

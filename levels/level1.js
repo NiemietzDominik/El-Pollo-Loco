@@ -7,8 +7,8 @@ const level1 = new Level(
     ],
 
     [
-        new Cloud(100),
-        new Cloud(200)
+        new Cloud(150, 0.35),
+        new Cloud(50, 0.10)
       
     ],
 
@@ -43,7 +43,10 @@ const level1 = new Level(
 
     [
     new Coins(),
-    new Coins()
+    new Coins(),
+    new Coins(),
+    new Coins(),
+    new Coins(),
     ]
 
 
