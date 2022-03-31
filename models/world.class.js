@@ -2,6 +2,7 @@ class World {
     backgroundMusic = new Audio('audio/backgroundMusic.mp3');
     character = new Character();
     statusbar = new Statusbar();
+    collectionOfCoins = new CoinsCollection();
     level = level1;
     canvas;
     ctx;
@@ -10,32 +11,37 @@ class World {
     throwableObjects = [];
 
 
+
     constructor(canvas, keyboard) {
-        this.backgroundMusic.play();
-        this.backgroundMusic.volume = 0.05;
-        this.backgroundMusic.playbackRate = 1.5;
+        this.playBackgroundMusic();
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
         this.run();
-   
+
     }
 
     setWorld() {
         this.character.world = this;
     }
 
-    run(){
+    playBackgroundMusic() {
+        this.backgroundMusic.play();
+        this.backgroundMusic.volume = 0.05;
+        this.backgroundMusic.playbackRate = 1.5;
+    }
+
+    run() {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
         }, 200);
     }
 
-    checkThrowObjects(){
-        if(this.keyboard.D){
+    checkThrowObjects() {
+        if (this.keyboard.D) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(bottle);
         }
@@ -52,12 +58,18 @@ class World {
         }, 1000);
     }
 
-    
+    checkCollectingObjects() {
+        setInterval(() => {
+            this.level.coins.forEach((coin) => {
+                if (this.character.isCollecting(coin)) {
+                    this.level.coins.splice(0, 1);
+                    this.cC++;
+                    console.log(this.collectionOfCoins.coinsCollection);
+                }
+            });
 
-
- 
-
-
+        }, 1000);
+    }
 
     draw() {
         this.ctx.clearRect(100, 100, this.canvas.width, this.canvas.height);
@@ -69,6 +81,10 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0); // back
         this.addToMap(this.statusbar);
+        this.ctx.translate(this.camera_x, 0); // forwards
+
+        this.ctx.translate(-this.camera_x, 0); // back
+
         this.ctx.translate(this.camera_x, 0); // forwards
 
         this.addObjectsToMap(this.level.enemies);

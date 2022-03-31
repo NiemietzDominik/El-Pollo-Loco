@@ -1,4 +1,4 @@
-class Coins extends CollectableObject {
+class Coin extends CollectableObject {
     x = 200;
     y = 100;
     height = 150;
@@ -10,7 +10,7 @@ class Coins extends CollectableObject {
     }
 
     spawnCoin() {
-        this.x = 500 + Math.random(3) * 1500;
+        this.x = 500 + Math.random(15) * 1500;
         this.y = 300 + Math.random() * 50; 
     }
 
