@@ -6,9 +6,7 @@ class CoinsCollection extends DrawableObject{
     cC = 0;
 
     coinsCollection = [cC];
-
-   
-
+    
    constructor(){
        super();
        this.loadImages(this.IMAGES);

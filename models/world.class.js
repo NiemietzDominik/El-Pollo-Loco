@@ -1,14 +1,23 @@
 class World {
     backgroundMusic = new Audio('audio/backgroundMusic.mp3');
     character = new Character();
-    statusbar = new Statusbar();
-    collectionOfCoins = new CoinsCollection();
+    statusbar = new Statusbar(
+        'img/7.Marcadores/Barra/Marcador vida/azul/0_.png',
+        'img/7.Marcadores/Barra/Marcador vida/azul/20_.png',
+        'img/7.Marcadores/Barra/Marcador vida/azul/40_.png',
+        'img/7.Marcadores/Barra/Marcador vida/azul/60_.png',
+        'img/7.Marcadores/Barra/Marcador vida/azul/80_.png',
+        'img/7.Marcadores/Barra/Marcador vida/azul/100_.png'
+    );
+
+    coinbar = new Statusbar("img/8.Coin/Moneda2.png");
     level = level1;
     canvas;
     ctx;
     keyboard;
     camera_x = -100;
     throwableObjects = [];
+    coins = 0;
 
 
 
@@ -60,11 +69,24 @@ class World {
 
     checkCollectingObjects() {
         setInterval(() => {
-            this.level.coins.forEach((coin) => {
+            this.level.coins.forEach((coin, index) => {
                 if (this.character.isCollecting(coin)) {
-                    this.level.coins.splice(0, 1);
-                    this.cC++;
-                    console.log(this.collectionOfCoins.coinsCollection);
+                    this.level.coins.splice(index, 1);
+                    this.coins += 5;
+                    this.coinbar.setPercentage(this.coins);
+                }
+            });
+
+        }, 1000);
+    }
+
+    checkCollectingObjects() {
+        setInterval(() => {
+            this.level.coins.forEach((coin, index) => {
+                if (this.character.isCollecting(coin)) {
+                    this.level.coins.splice(index, 1);
+                    this.coins += 5;
+                    this.coinbar.setPercentage(this.coins);
                 }
             });
 
@@ -81,11 +103,9 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0); // back
         this.addToMap(this.statusbar);
+        this.addToMap(this.coinbar);
         this.ctx.translate(this.camera_x, 0); // forwards
 
-        this.ctx.translate(-this.camera_x, 0); // back
-
-        this.ctx.translate(this.camera_x, 0); // forwards
 
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.clouds);
