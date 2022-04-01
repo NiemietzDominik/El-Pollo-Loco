@@ -80,18 +80,6 @@ class World {
         }, 1000);
     }
 
-    checkCollectingObjects() {
-        setInterval(() => {
-            this.level.coins.forEach((coin, index) => {
-                if (this.character.isCollecting(coin)) {
-                    this.level.coins.splice(index, 1);
-                    this.coins += 5;
-                    this.coinbar.setPercentage(this.coins);
-                }
-            });
-
-        }, 1000);
-    }
 
     draw() {
         this.ctx.clearRect(100, 100, this.canvas.width, this.canvas.height);
