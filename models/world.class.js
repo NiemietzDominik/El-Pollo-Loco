@@ -1,16 +1,22 @@
 class World {
     backgroundMusic = new Audio('audio/backgroundMusic.mp3');
+    coinSound = new Audio('audio/coin.mp3');
     character = new Character();
-    statusbar = new Statusbar(
+    statusbar = new Statusbar([
         'img/7.Marcadores/Barra/Marcador vida/azul/0_.png',
         'img/7.Marcadores/Barra/Marcador vida/azul/20_.png',
         'img/7.Marcadores/Barra/Marcador vida/azul/40_.png',
         'img/7.Marcadores/Barra/Marcador vida/azul/60_.png',
         'img/7.Marcadores/Barra/Marcador vida/azul/80_.png',
         'img/7.Marcadores/Barra/Marcador vida/azul/100_.png'
-    );
+    ], 40, 0, 260, 60);
 
-    coinbar = new Statusbar("img/8.Coin/Moneda2.png");
+
+    coinbar = new CollectedCoins('img/8.Coin/Moneda1.png');
+
+    coinInventar = [this.coinbar];
+
+
     level = level1;
     canvas;
     ctx;
@@ -21,14 +27,16 @@ class World {
 
 
 
-    constructor(canvas, keyboard) {
+    constructor(canvas, keyboard, coinInventar) {
         this.playBackgroundMusic();
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.coinInventar = coinInventar;
         this.draw();
         this.setWorld();
         this.run();
+        this.checkCollectingObjects();
 
     }
 
@@ -37,10 +45,9 @@ class World {
     }
 
     playBackgroundMusic() {
-        this.backgroundMusic.play();
-        this.backgroundMusic.volume = 0.05;
-        this.backgroundMusic.playbackRate = 1.5;
+        this.sound(this.backgroundMusic, 0.05, 1.5);
     }
+
 
     run() {
         setInterval(() => {
@@ -70,15 +77,20 @@ class World {
     checkCollectingObjects() {
         setInterval(() => {
             this.level.coins.forEach((coin, index) => {
-                if (this.character.isCollecting(coin)) {
+                if (this.character.isColliding(coin)) {
                     this.level.coins.splice(index, 1);
-                    this.coins += 5;
-                    this.coinbar.setPercentage(this.coins);
-                }
-            });
+                    this.sound(this.coinSound, 0.2, 2)
+                    this.coins++;
+                    this.coinInventar.push(this.coinbar);
+                    console.log(this.coins);
 
-        }, 1000);
+                }
+
+            });
+        }, 100);
     }
+
+
 
 
     draw() {
@@ -91,7 +103,7 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0); // back
         this.addToMap(this.statusbar);
-        this.addToMap(this.coinbar);
+        this.addToMap(this.coinbar)
         this.ctx.translate(this.camera_x, 0); // forwards
 
 
@@ -141,6 +153,12 @@ class World {
         mo.x = mo.x * -1;
         this.camera_x = this.camera_x
         this.ctx.restore();
+    }
+
+    sound(volSound, vol, playRate) {
+        volSound.play();
+        volSound.volume = vol;
+        volSound.playbackRate = playRate;
     }
 }
 
