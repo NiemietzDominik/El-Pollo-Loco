@@ -7,10 +7,13 @@ class CollectedCoins extends DrawableObject{
     x = 20;
     y = 30;
     
-
-    constructor(images) {
+    constructor(images, x, y, height, width) {
         super();
         this.IMAGES = images;
+        this.x = x;
+        this.y = y;
+        this.height = height;
+        this.width = width;
         this.loadImage(this.IMAGES);
     }
 }

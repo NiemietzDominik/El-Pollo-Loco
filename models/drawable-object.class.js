@@ -25,8 +25,11 @@ class DrawableObject {
         if (this instanceof Chicken) {
             this.rectangleForChicken(ctx);
         }
-        if(this instanceof Coins){
+        if(this instanceof Coin){
             this.rectangleForCoin(ctx);
+        }
+        if(this instanceof Bottle){
+            this.rectangleForBottle(ctx)
         }
 
     }
@@ -56,6 +59,14 @@ class DrawableObject {
     }
 
     rectangleForCoin(ctx){
+        ctx.beginPath();
+        ctx.lineWidth = "5";
+        ctx.strokeStyle = "blue";
+        ctx.rect(this.x+40, this.y+40, this.width-80, this.height-80);
+        ctx.stroke();
+    }
+    rectangleForBottle(ctx)
+    {
         ctx.beginPath();
         ctx.lineWidth = "5";
         ctx.strokeStyle = "blue";

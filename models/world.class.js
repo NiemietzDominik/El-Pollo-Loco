@@ -1,6 +1,7 @@
 class World {
     backgroundMusic = new Audio('audio/backgroundMusic.mp3');
     coinSound = new Audio('audio/coin.mp3');
+    bottleSound = new Audio('audio/bottle.mp3');
     character = new Character();
     statusbar = new Statusbar([
         'img/7.Marcadores/Barra/Marcador vida/azul/0_.png',
@@ -9,34 +10,28 @@ class World {
         'img/7.Marcadores/Barra/Marcador vida/azul/60_.png',
         'img/7.Marcadores/Barra/Marcador vida/azul/80_.png',
         'img/7.Marcadores/Barra/Marcador vida/azul/100_.png'
-    ], 40, 0, 260, 60);
+    ], 0, 0, 260, 60);
 
+    hudCoins = [];
 
-    coinbar = new CollectedCoins('img/8.Coin/Moneda1.png');
-
-    coinInventar = [this.coinbar];
-
+    throwableObjects = [];
 
     level = level1;
     canvas;
     ctx;
     keyboard;
     camera_x = -100;
-    throwableObjects = [];
-    coins = 0;
 
-
-
-    constructor(canvas, keyboard, coinInventar) {
+    constructor(canvas, keyboard) {
         this.playBackgroundMusic();
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.coinInventar = coinInventar;
         this.draw();
         this.setWorld();
         this.run();
-        this.checkCollectingObjects();
+        this.checkCollectingCoins();
+        this.checkCollectingBottles();
 
     }
 
@@ -74,18 +69,28 @@ class World {
         }, 1000);
     }
 
-    checkCollectingObjects() {
+    checkCollectingCoins() {
         setInterval(() => {
             this.level.coins.forEach((coin, index) => {
                 if (this.character.isColliding(coin)) {
                     this.level.coins.splice(index, 1);
+                    let distance = this.hudCoins.length * 15;
+                    this.hudCoins.push(new CollectedCoins('img/8.Coin/Moneda1.png', distance-20, 30, 100, 100));
                     this.sound(this.coinSound, 0.2, 2)
-                    this.coins++;
-                    this.coinInventar.push(this.coinbar);
-                    console.log(this.coins);
-
                 }
+            });
+        }, 100);
+    }
 
+    checkCollectingBottles() {
+        setInterval(() => {
+            this.level.bottle.forEach((bottle, index) => {
+                if (this.character.isColliding(bottle)) {
+                    this.level.bottle.splice(index, 1);
+                    let distance = this.throwableObjects.length * 5;
+                    this.throwableObjects.push(new CollectedCoins('img/7.Marcadores/Icono/Botella.png', distance+10,100, 40, 40));
+                    this.sound(this.bottleSound, 0.2, 2);
+                }
             });
         }, 100);
     }
@@ -103,15 +108,16 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0); // back
         this.addToMap(this.statusbar);
-        this.addToMap(this.coinbar)
+        this.addObjectsToMap(this.hudCoins);
+        this.addObjectsToMap(this.throwableObjects);
         this.ctx.translate(this.camera_x, 0); // forwards
 
 
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottle);
         this.addObjectsToMap(this.throwableObjects);
-
         this.ctx.translate(-this.camera_x, 0);
 
         let self = this;
@@ -133,6 +139,7 @@ class World {
         }
 
         mo.draw(this.ctx);
+
         //mo.drawFrame(this.ctx); ---> Draw a Rectangle for every Object in Game
 
 
