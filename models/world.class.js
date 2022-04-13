@@ -3,6 +3,7 @@ class World {
     coinSound = new Audio('audio/coin.mp3');
     bottleSound = new Audio('audio/bottle.mp3');
     character = new Character();
+    chicken = new Chicken();
     statusbar = new Statusbar([
         'img/7.Marcadores/Barra/Marcador vida/azul/0_.png',
         'img/7.Marcadores/Barra/Marcador vida/azul/20_.png',
@@ -13,6 +14,7 @@ class World {
     ], 0, 0, 260, 60);
 
     hudCoins = [];
+    hudBottles = [];
 
     throwableObjects = [];
 
@@ -52,9 +54,10 @@ class World {
     }
 
     checkThrowObjects() {
-        if (this.keyboard.D) {
+        if (this.keyboard.D && this.hudBottles.length > 0) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(bottle);
+            this.hudBottles.splice(0, 1);
         }
     }
 
@@ -69,13 +72,23 @@ class World {
         }, 1000);
     }
 
+    checkJumpOnHead() {
+        setInterval(() => {
+            this.level.enemies.forEach((enemy) => {
+                if (this.character.isColliding(enemy) && this.isAboveGround()) {
+                    this.chicken.instantKill(); 
+                }
+            })
+        }, 200);
+    }
+
     checkCollectingCoins() {
         setInterval(() => {
             this.level.coins.forEach((coin, index) => {
                 if (this.character.isColliding(coin)) {
                     this.level.coins.splice(index, 1);
                     let distance = this.hudCoins.length * 15;
-                    this.hudCoins.push(new CollectedCoins('img/8.Coin/Moneda1.png', distance-20, 30, 100, 100));
+                    this.hudCoins.push(new CollectedCoins('img/8.Coin/Moneda1.png', distance - 20, 30, 100, 100));
                     this.sound(this.coinSound, 0.2, 2)
                 }
             });
@@ -87,9 +100,10 @@ class World {
             this.level.bottle.forEach((bottle, index) => {
                 if (this.character.isColliding(bottle)) {
                     this.level.bottle.splice(index, 1);
-                    let distance = this.throwableObjects.length * 5;
-                    this.throwableObjects.push(new CollectedCoins('img/7.Marcadores/Icono/Botella.png', distance+10,100, 40, 40));
+                    let distance = this.hudBottles.length * 5;
+                    this.hudBottles.push(new CollectedBottles('img/7.Marcadores/Icono/Botella.png', distance + 10, 100, 40, 40));
                     this.sound(this.bottleSound, 0.2, 2);
+                    console.log(this.hudBottles);
                 }
             });
         }, 100);
@@ -109,7 +123,7 @@ class World {
         this.ctx.translate(-this.camera_x, 0); // back
         this.addToMap(this.statusbar);
         this.addObjectsToMap(this.hudCoins);
-        this.addObjectsToMap(this.throwableObjects);
+        this.addObjectsToMap(this.hudBottles);
         this.ctx.translate(this.camera_x, 0); // forwards
 
 

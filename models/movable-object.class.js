@@ -22,7 +22,6 @@ class MovableObject extends DrawableObject {
         } else {
             return this.y < 180;
         }
-
     }
 
     // character.iscolliding(chicken);
@@ -30,10 +29,10 @@ class MovableObject extends DrawableObject {
         return this.x + this.width > mo.x &&
             this.y + this.height > mo.y &&
             this.x < mo.x &&
-            this.y < mo.y + mo.height;
+            this.y < mo.y + mo.height;     
     }
-    
-    
+
+   
 
     hit() {
         this.energy -= 5;
@@ -43,6 +42,10 @@ class MovableObject extends DrawableObject {
             this.lastHit = new Date().getTime();
         }
     }
+
+   instantKill(){
+       this.energy = 0;
+   }
 
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit; // difference in ms
