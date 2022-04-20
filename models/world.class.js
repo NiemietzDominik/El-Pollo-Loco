@@ -4,18 +4,12 @@ class World {
     bottleSound = new Audio('audio/bottle.mp3');
     character = new Character();
     chicken = new Chicken();
-    statusbar = new Statusbar([
-        'img/7.Marcadores/Barra/Marcador vida/azul/0_.png',
-        'img/7.Marcadores/Barra/Marcador vida/azul/20_.png',
-        'img/7.Marcadores/Barra/Marcador vida/azul/40_.png',
-        'img/7.Marcadores/Barra/Marcador vida/azul/60_.png',
-        'img/7.Marcadores/Barra/Marcador vida/azul/80_.png',
-        'img/7.Marcadores/Barra/Marcador vida/azul/100_.png'
-    ], 0, 0, 260, 60);
+    endboss = new Endboss();
+    
+    statusbar = new Statusbar();
 
     hudCoins = [];
     hudBottles = [];
-
     throwableObjects = [];
 
     level = level1;
@@ -34,7 +28,7 @@ class World {
         this.run();
         this.checkCollectingCoins();
         this.checkCollectingBottles();
-
+        this.checkJumpOnHead();
     }
 
     setWorld() {
@@ -58,28 +52,41 @@ class World {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(bottle);
             this.hudBottles.splice(0, 1);
+            setInterval(() => {
+                if(bottle.isColliding(this.endboss)){
+                    this.endboss.bottleHit();
+                }
+            }, 100);
         }
     }
 
     checkCollisions() {
         setInterval(() => {
             this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy)) {
+                if (this.character.isColliding(enemy) && !this.character.isAboveGround()) {
                     this.character.hit();
                     this.statusbar.setPercentage(this.character.energy);
                 }
             })
-        }, 1000);
+        }, 2000);
     }
+
+  
 
     checkJumpOnHead() {
         setInterval(() => {
             this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy) && this.isAboveGround()) {
-                    this.chicken.instantKill(); 
+                if (!enemy.isDead() && this.character.isColliding(enemy) && this.character.isAboveGround()) {
+                    enemy.instandKill();
+                    setTimeout(() => {
+                        let index = this.level.enemies.indexOf(enemy);
+                        this.level.enemies.splice(index, 1);
+                    }, 500);
+
+
                 }
             })
-        }, 200);
+        }, 100);
     }
 
     checkCollectingCoins() {

@@ -1,6 +1,7 @@
 class ThrowableObject extends MovableObject {
  
     throw_sound = new Audio('audio/throw.mp3')
+  
 
     constructor(x, y){
         super().loadImage('img/7.Marcadores/Icono/Botella.png');
@@ -9,7 +10,6 @@ class ThrowableObject extends MovableObject {
         this.height = 60;
         this.width = 50;
         this.throw();
-        
     }
 
     throw(){
@@ -21,5 +21,7 @@ class ThrowableObject extends MovableObject {
             this.x += 10;
         }, 25);
     }
+
+    
 
 }

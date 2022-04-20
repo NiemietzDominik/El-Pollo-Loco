@@ -87,6 +87,7 @@ class Character extends MovableObject {
         setInterval(() => {
 
             if (this.isDead()) {
+               
                // this.scream_sound.volume = 0.05;
                // this.scream_sound.play();
                 this.playAnimation(this.IMAGES_DEAD);
