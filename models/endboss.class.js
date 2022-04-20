@@ -4,6 +4,10 @@ class Endboss extends MovableObject {
     width = 400;
     y = -100;
 
+    hurtSound = new Audio('audio/endboss_hurt.mp3');
+    deadSound = new Audio('audio/endboss_death.mp3');
+
+
     IMAGES_ALERT = [
         'img/4.Secuencias_Enemy_gigantón-Doña_Gallinota-/2.Ateción-ataque/1.Alerta/G5.png',
         'img/4.Secuencias_Enemy_gigantón-Doña_Gallinota-/2.Ateción-ataque/1.Alerta/G6.png',
@@ -32,7 +36,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_ALERT);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
-        this.x = 1400;
+        this.x = 2400;
         this.animate();
     }
 
@@ -41,15 +45,22 @@ class Endboss extends MovableObject {
         setInterval(() => {
             if(this.endbossDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
+                this.sound(this.deadSound, 0.4, 1);
 
             } else if(this.isHurt()){
                 this.playAnimation(this.IMAGES_HURT)
                 console.log('hurt');
+                this.sound(this.hurtSound, 0.4, 1.4);
             } else{
                 this.playAnimation(this.IMAGES_ALERT)
             }
         }, 200);
     };
 
+    sound(volSound, vol, playRate) {
+        volSound.play();
+        volSound.volume = vol;
+        volSound.playbackRate = playRate;
+    }
 
 }
