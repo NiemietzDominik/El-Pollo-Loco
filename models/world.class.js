@@ -4,15 +4,17 @@ class World {
     bottleSound = new Audio('audio/bottle.mp3');
     character = new Character();
     chicken = new Chicken();
-    endboss = new Endboss();
-    
+    miniChicken = new MiniChicken();
+    level = level1;
+    endboss = this.level.enemies.find(e => e instanceof Endboss);
+
     statusbar = new Statusbar();
 
     hudCoins = [];
     hudBottles = [];
     throwableObjects = [];
 
-    level = level1;
+    endbossSeeCharacter = false;
     canvas;
     ctx;
     keyboard;
@@ -29,6 +31,8 @@ class World {
         this.checkCollectingCoins();
         this.checkCollectingBottles();
         this.checkJumpOnHead();
+        this.checkEndbossSeeCharackter();
+        this.spawnMiniChickens();
     }
 
     setWorld() {
@@ -53,7 +57,7 @@ class World {
             this.throwableObjects.push(bottle);
             this.hudBottles.splice(0, 1);
             setInterval(() => {
-                if(bottle.isColliding(this.endboss)){
+                if (bottle.isColliding(this.endboss)) {
                     this.endboss.bottleHit();
                 }
             }, 100);
@@ -71,7 +75,7 @@ class World {
         }, 2000);
     }
 
-  
+
 
     checkJumpOnHead() {
         setInterval(() => {
@@ -114,6 +118,29 @@ class World {
                 }
             });
         }, 100);
+    }
+
+    checkEndbossSeeCharackter() {
+        setInterval(() => {
+            if (this.character.camera_x <= -1850) {
+                this.endbossSeeCharacter = true;
+                if (this.endbossSeeCharacter == true)
+
+                    this.spawnMiniChickens();
+
+            }
+            else if (this.character.camera_x >= -1850) {
+                this.endbossSeeCharacter = false;
+            };
+        }, 200);
+    }
+
+    spawnMiniChickens() {
+        setInterval(() => {
+            this.level.enemies.push(new MiniChicken(3000, 2));
+        },
+            5000);
+
     }
 
 
