@@ -34,6 +34,8 @@ class DrawableObject {
 
     }
 
+   
+
     loadImages(arr) {
         arr.forEach(path => {
             let img = new Image();
@@ -41,6 +43,8 @@ class DrawableObject {
             this.imageCache[path] = img;
         });
     }
+
+  
 
     rectangleForCharacter(ctx) {
         ctx.beginPath();

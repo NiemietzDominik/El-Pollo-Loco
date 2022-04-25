@@ -4,9 +4,10 @@ class World {
     bottleSound = new Audio('audio/bottle.mp3');
     character = new Character();
     chicken = new Chicken();
-    miniChicken = new MiniChicken();
     level = level1;
     endboss = this.level.enemies.find(e => e instanceof Endboss);
+    endbossEnergy = this.endboss.energy;
+    miniboss = this.level.enemies.find(mb => mb instanceof MiniEndboss);
 
     statusbar = new Statusbar();
 
@@ -31,8 +32,9 @@ class World {
         this.checkCollectingCoins();
         this.checkCollectingBottles();
         this.checkJumpOnHead();
-        this.checkEndbossSeeCharackter();
+        this.checkEndbossSeeCharacter();
         this.spawnMiniChickens();
+
     }
 
     setWorld() {
@@ -86,8 +88,6 @@ class World {
                         let index = this.level.enemies.indexOf(enemy);
                         this.level.enemies.splice(index, 1);
                     }, 500);
-
-
                 }
             })
         }, 100);
@@ -120,30 +120,66 @@ class World {
         }, 100);
     }
 
-    checkEndbossSeeCharackter() {
+    checkEndbossSeeCharacter() {
         setInterval(() => {
-            if (this.character.camera_x <= -1850) {
+            if (this.camera_x <= -6520) {
                 this.endbossSeeCharacter = true;
-                if (this.endbossSeeCharacter == true)
 
-                    this.spawnMiniChickens();
-
+                if (this.endbossSeeCharacter == true && world.endboss.endbossEnergy == 100) {
+                    this.endbossAttack1();
+                } else if (this.endbossSeeCharacter == true && world.endboss.endbossEnergy <= 80 && world.endboss.endbossEnergy > 50) {
+                    this.endbossAttack2();
+                } else if (this.endbossSeeCharacter == true && world.endboss.endbossEnergy <= 50) {
+                    this.endbossAttack3();
+                }
             }
-            else if (this.character.camera_x >= -1850) {
-                this.endbossSeeCharacter = false;
-            };
-        }, 200);
+        }, 3000);
     }
 
-    spawnMiniChickens() {
+    checkEndbossDead(){
         setInterval(() => {
-            this.level.enemies.push(new MiniChicken(3000, 2));
-        },
-            5000);
-
+            if(this.endboss.energy == 0){
+                this.world.level.enemies.splice(index, 1)
+            }
+            
+        }, 1000);
     }
 
+    endbossAttack1() {
+        console.log('attack 1')
+        this.spawnMiniChickens(8000, 3, 380);
+        this.spawnMiniChickens(7800, 4, 380);
+        this.spawnMiniChickens(8000, 5, 380);
+    }
 
+    endbossAttack2() {
+        console.log('attack 2')
+        this.spawnMiniChickens(8030, 5, 380);
+        this.spawnMiniChickens(8050, 5, 380);
+        this.spawnMiniChickens(7800, 7, 340);
+        this.spawnMiniChickens(7800, 7, 250);
+    }
+
+    endbossAttack3() {
+        console.log('attack 3')
+        this.spawnMiniChickens(8030, 5, 280);
+        this.spawnMiniChickens(8050, 5, 300);
+        this.spawnMiniChickens(8070, 5, 320);
+        this.spawnMiniChickens(8090, 5, 340);
+
+        
+            this.spawnMiniChickens(8130, 7, 380);
+            this.spawnMiniChickens(8150, 7, 380);
+            this.spawnMiniChickens(8170, 7, 380);
+            this.spawnMiniChickens(8190, 7, 380);
+        
+    }
+
+    spawnMiniChickens(x, speed, y) {
+        if (this.endbossSeeCharacter == true) {
+            this.level.enemies.push(new MiniChicken(x, speed, y));
+        }
+    }
 
 
     draw() {

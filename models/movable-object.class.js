@@ -4,7 +4,7 @@ class MovableObject extends DrawableObject {
     speedY = 0;
     acceleration = 2.5;
     energy = 100;
-    endbossEnergy = 100;
+    
     damage = 5;
     lastHit = 0;
     jump_sound = new Audio('audio/jump.mp3');
@@ -37,7 +37,7 @@ class MovableObject extends DrawableObject {
 
 
     hit() {
-        this.energy -= 1;
+        this.energy -= 0.7;
         if (this.energy <= 0) {
             this.energy = 0;
         } else {
@@ -53,7 +53,7 @@ class MovableObject extends DrawableObject {
             console.log('endboss is Dead');
         } else {
             this.lastHit = new Date().getTime();
-            console.log('endbossEnergy:', this.endbossEnergy);
+            console.log('endbossEnergy:', this.energy);
         }
         
     }
@@ -73,8 +73,14 @@ class MovableObject extends DrawableObject {
     }
 
     endbossDead(){
-        console.log('endboss is dead');
         return this.endbossEnergy == 0;
+    }
+    
+
+    spawnMiniChickens(x, speed) {
+        if(this.endbossSeeCharacter == true){
+            this.level.enemies.push(new MiniChicken(x, speed));
+        }
     }
 
 

@@ -3,7 +3,6 @@ class Endboss extends MovableObject {
     height = 600;
     width = 400;
     y = -100;
-
     hurtSound = new Audio('audio/endboss_hurt.mp3');
     deadSound = new Audio('audio/endboss_death.mp3');
 
@@ -31,19 +30,32 @@ class Endboss extends MovableObject {
         'img/4.Secuencias_Enemy_gigantón-Doña_Gallinota-/3.Herida/G23.png',
     ]
 
+    IMAGES_ATTACK = [
+        'img/4.Secuencias_Enemy_gigantón-Doña_Gallinota-/2.Ateción-ataque/2.Ataque/G13.png',
+        'img/4.Secuencias_Enemy_gigantón-Doña_Gallinota-/2.Ateción-ataque/2.Ataque/G14.png',
+        'img/4.Secuencias_Enemy_gigantón-Doña_Gallinota-/2.Ateción-ataque/2.Ataque/G15.png',
+        'img/4.Secuencias_Enemy_gigantón-Doña_Gallinota-/2.Ateción-ataque/2.Ataque/G16.png',
+        'img/4.Secuencias_Enemy_gigantón-Doña_Gallinota-/2.Ateción-ataque/2.Ataque/G17.png',
+        'img/4.Secuencias_Enemy_gigantón-Doña_Gallinota-/2.Ateción-ataque/2.Ataque/G18.png',
+        'img/4.Secuencias_Enemy_gigantón-Doña_Gallinota-/2.Ateción-ataque/2.Ataque/G19.png',
+        'img/4.Secuencias_Enemy_gigantón-Doña_Gallinota-/2.Ateción-ataque/2.Ataque/G20.png'
+    ]
+
     constructor() {
         super().loadImage(this.IMAGES_ALERT[0]);
         this.loadImages(this.IMAGES_ALERT);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
-        this.x = 2400;
+        this.loadImages(this.IMAGES_ATTACK);
+        this.x = 3100;
         this.animate();
+
     }
 
     animate() {
 
         setInterval(() => {
-            if(this.endbossDead()) {
+            if(this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
                 this.sound(this.deadSound, 0.4, 1);
 
@@ -52,9 +64,9 @@ class Endboss extends MovableObject {
                 console.log('hurt');
                 this.sound(this.hurtSound, 0.4, 1.4);
             } else{
-                this.playAnimation(this.IMAGES_ALERT)
+                this.playAnimation(this.IMAGES_ATTACK)
             }
-        }, 200);
+        }, 300);
     };
 
     sound(volSound, vol, playRate) {
