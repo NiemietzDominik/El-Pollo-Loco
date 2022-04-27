@@ -10,7 +10,7 @@ class World {
     endbossEnergy = this.endboss.endbossEnergy;
 
     miniEndboss = this.level.enemies.find(em => em instanceof MiniEndboss);
-    miniEndbossEnergy = this.miniEndboss.endbossEnergy;
+    miniEndbossEnergy = this.miniEndboss.miniEndbossEnergy;
 
     statusbar = new Statusbar();
 
