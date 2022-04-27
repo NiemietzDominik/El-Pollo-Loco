@@ -5,6 +5,7 @@ class Endboss extends MovableObject {
     y = -100;
     hurtSound = new Audio('audio/endboss_hurt.mp3');
     deadSound = new Audio('audio/endboss_death.mp3');
+    endbossEnergy = 100;
 
 
     IMAGES_ALERT = [
@@ -48,6 +49,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_ATTACK);
         this.x = 3100;
+        this.endbossEnergy = this.endbossEnergy;
         this.animate();
 
     }
@@ -55,7 +57,7 @@ class Endboss extends MovableObject {
     animate() {
 
         setInterval(() => {
-            if(this.isDead()) {
+            if(this.endbossDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
                 this.sound(this.deadSound, 0.4, 1);
 

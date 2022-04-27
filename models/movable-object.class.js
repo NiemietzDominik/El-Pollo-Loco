@@ -4,7 +4,6 @@ class MovableObject extends DrawableObject {
     speedY = 0;
     acceleration = 2.5;
     energy = 100;
-    
     damage = 5;
     lastHit = 0;
     jump_sound = new Audio('audio/jump.mp3');
@@ -42,20 +41,39 @@ class MovableObject extends DrawableObject {
             this.energy = 0;
         } else {
             this.lastHit = new Date().getTime();
-            console.log('playerEnergy:', this.energy);
         }
     }
 
     bottleHit() {
+        if (this instanceof Endboss) {
+            this.endbossGotHit();
+        }
+        if (this instanceof MiniEndboss) {
+           this.miniEndbossGotHit();
+        }
+    }
+
+    endbossGotHit() {
         this.endbossEnergy -= 25;
         if (this.endbossEnergy <= 0) {
             this.endbossEnergy = 0;
             console.log('endboss is Dead');
         } else {
             this.lastHit = new Date().getTime();
-            console.log('endbossEnergy:', this.energy);
+            console.log('endbossEnergy:', this.endbossEnergy);
         }
-        
+    }
+
+    miniEndbossGotHit(){
+        this.miniEndbossEnergy -= 25;
+        if (this.miniEndbossEnergy <= 0) {
+            this.miniEndbossEnergy = 0;
+            this.alive = false;
+            console.log('miniEndboss is alive =', this.alive,',', 'miniEndbossEnergy:', this.miniEndbossEnergy);
+        } else {
+            this.lastHit = new Date().getTime();
+            console.log('miniEndbossEnergy:', this.miniEndbossEnergy);
+        }
     }
 
     instandKill() {
@@ -72,13 +90,17 @@ class MovableObject extends DrawableObject {
         return this.energy == 0;
     }
 
-    endbossDead(){
+    endbossDead() {
         return this.endbossEnergy == 0;
     }
-    
+
+    miniEndbossDead() {
+        return this.miniEndbossEnergy == 0;
+    }
+
 
     spawnMiniChickens(x, speed) {
-        if(this.endbossSeeCharacter == true){
+        if (this.endbossSeeCharacter == true) {
             this.level.enemies.push(new MiniChicken(x, speed));
         }
     }

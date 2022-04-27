@@ -5,9 +5,12 @@ class World {
     character = new Character();
     chicken = new Chicken();
     level = level1;
+
     endboss = this.level.enemies.find(e => e instanceof Endboss);
-    endbossEnergy = this.endboss.energy;
-    miniboss = this.level.enemies.find(mb => mb instanceof MiniEndboss);
+    endbossEnergy = this.endboss.endbossEnergy;
+
+    miniEndboss = this.level.enemies.find(em => em instanceof MiniEndboss);
+    miniEndbossEnergy = this.miniEndboss.endbossEnergy;
 
     statusbar = new Statusbar();
 
@@ -34,6 +37,8 @@ class World {
         this.checkJumpOnHead();
         this.checkEndbossSeeCharacter();
         this.spawnMiniChickens();
+        this.throwBottle();
+        this.checkEndbossDead();
 
     }
 
@@ -50,6 +55,7 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
+            this.checkEndbossDead();
         }, 200);
     }
 
@@ -61,6 +67,9 @@ class World {
             setInterval(() => {
                 if (bottle.isColliding(this.endboss)) {
                     this.endboss.bottleHit();
+                }
+                if (bottle.isColliding(this.miniEndboss)) {
+                    this.miniEndboss.bottleHit();
                 }
             }, 100);
         }
@@ -76,8 +85,6 @@ class World {
             })
         }, 2000);
     }
-
-
 
     checkJumpOnHead() {
         setInterval(() => {
@@ -110,11 +117,7 @@ class World {
         setInterval(() => {
             this.level.bottle.forEach((bottle, index) => {
                 if (this.character.isColliding(bottle)) {
-                    this.level.bottle.splice(index, 1);
-                    let distance = this.hudBottles.length * 5;
-                    this.hudBottles.push(new CollectedBottles('img/7.Marcadores/Icono/Botella.png', distance + 10, 100, 40, 40));
-                    this.sound(this.bottleSound, 0.2, 2);
-                    console.log(this.hudBottles);
+                    this.throwBottle(index);
                 }
             });
         }, 100);
@@ -122,27 +125,31 @@ class World {
 
     checkEndbossSeeCharacter() {
         setInterval(() => {
-            if (this.camera_x <= -6520) {
+            if (this.camera_x <= -2620) {
                 this.endbossSeeCharacter = true;
 
                 if (this.endbossSeeCharacter == true && world.endboss.endbossEnergy == 100) {
                     this.endbossAttack1();
                 } else if (this.endbossSeeCharacter == true && world.endboss.endbossEnergy <= 80 && world.endboss.endbossEnergy > 50) {
                     this.endbossAttack2();
-                } else if (this.endbossSeeCharacter == true && world.endboss.endbossEnergy <= 50) {
+                } else if (this.endbossSeeCharacter == true && world.endboss.endbossEnergy <= 50 && world.endboss.endbossEnergy > 0) {
                     this.endbossAttack3();
                 }
             }
         }, 3000);
     }
 
-    checkEndbossDead(){
+    checkEndbossDead() {
         setInterval(() => {
-            if(this.endboss.energy == 0){
-                this.world.level.enemies.splice(index, 1)
-            }
-            
-        }, 1000);
+            this.level.enemies.forEach((enemy) => {
+                if (this.miniEndboss.alive == false) {
+                    setTimeout(() => {
+                        let index = this.level.enemies.indexOf(enemy);
+                        this.level.enemies.splice(index, 1);
+                    }, 500);
+                }
+            })
+        }, 100);
     }
 
     endbossAttack1() {
@@ -167,18 +174,25 @@ class World {
         this.spawnMiniChickens(8070, 5, 320);
         this.spawnMiniChickens(8090, 5, 340);
 
-        
-            this.spawnMiniChickens(8130, 7, 380);
-            this.spawnMiniChickens(8150, 7, 380);
-            this.spawnMiniChickens(8170, 7, 380);
-            this.spawnMiniChickens(8190, 7, 380);
-        
+
+        this.spawnMiniChickens(8130, 7, 380);
+        this.spawnMiniChickens(8150, 7, 380);
+        this.spawnMiniChickens(8170, 7, 380);
+        this.spawnMiniChickens(8190, 7, 380);
+
     }
 
     spawnMiniChickens(x, speed, y) {
         if (this.endbossSeeCharacter == true) {
             this.level.enemies.push(new MiniChicken(x, speed, y));
         }
+    }
+
+    throwBottle(index) {
+        this.level.bottle.splice(index, 1);
+        let distance = this.hudBottles.length * 5;
+        this.hudBottles.push(new CollectedBottles('img/7.Marcadores/Icono/Botella.png', distance + 10, 100, 40, 40));
+        this.sound(this.bottleSound, 0.2, 2);
     }
 
 
