@@ -35,44 +35,12 @@ class MovableObject extends DrawableObject {
 
 
 
-    hit() {
-        this.energy -= 0.7;
+    hit(damage) {
+        this.energy -= damage;
         if (this.energy <= 0) {
             this.energy = 0;
         } else {
             this.lastHit = new Date().getTime();
-        }
-    }
-
-    bottleHit() {
-        if (this instanceof Endboss) {
-            this.endbossGotHit();
-        }
-        if (this instanceof MiniEndboss) {
-           this.miniEndbossGotHit();
-        }
-    }
-
-    endbossGotHit() {
-        this.endbossEnergy -= 25;
-        if (this.endbossEnergy <= 0) {
-            this.endbossEnergy = 0;
-            console.log('endboss is Dead');
-        } else {
-            this.lastHit = new Date().getTime();
-            console.log('endbossEnergy:', this.endbossEnergy);
-        }
-    }
-
-    miniEndbossGotHit(){
-        this.miniEndbossEnergy -= 25;
-        if (this.miniEndbossEnergy <= 0) {
-            this.miniEndbossEnergy = 0;
-            this.alive = false;
-            console.log('miniEndboss is alive =', this.alive,',', 'miniEndbossEnergy:', this.miniEndbossEnergy);
-        } else {
-            this.lastHit = new Date().getTime();
-            console.log('miniEndbossEnergy:', this.miniEndbossEnergy);
         }
     }
 
@@ -89,23 +57,6 @@ class MovableObject extends DrawableObject {
     isDead() {
         return this.energy == 0;
     }
-
-    endbossDead() {
-        return this.endbossEnergy == 0;
-    }
-
-    miniEndbossDead() {
-        return this.miniEndbossEnergy == 0;
-    }
-
-
-    spawnMiniChickens(x, speed) {
-        if (this.endbossSeeCharacter == true) {
-            this.level.enemies.push(new MiniChicken(x, speed));
-        }
-    }
-
-
 
     moveRight() {
         this.x += this.speed;

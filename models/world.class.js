@@ -3,14 +3,11 @@ class World {
     coinSound = new Audio('audio/coin.mp3');
     bottleSound = new Audio('audio/bottle.mp3');
     character = new Character();
-    chicken = new Chicken();
+
     level = level1;
 
     endboss = this.level.enemies.find(e => e instanceof Endboss);
-    endbossEnergy = this.endboss.endbossEnergy;
-
     miniEndboss = this.level.enemies.find(em => em instanceof MiniEndboss);
-    miniEndbossEnergy = this.miniEndboss.miniEndbossEnergy;
 
     statusbar = new Statusbar();
 
@@ -18,7 +15,7 @@ class World {
     hudBottles = [];
     throwableObjects = [];
 
-    endbossSeeCharacter = false;
+       endbossSeeCharacter = false;
     canvas;
     ctx;
     keyboard;
@@ -34,11 +31,12 @@ class World {
         this.run();
         this.checkCollectingCoins();
         this.checkCollectingBottles();
-        this.checkJumpOnHead();
         this.checkEndbossSeeCharacter();
         this.spawnMiniChickens();
         this.throwBottle();
         this.checkEndbossDead();
+        this.checkCollisions();
+        this.checkJumpOnHead();
 
     }
 
@@ -55,7 +53,6 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-            this.checkEndbossDead();
         }, 200);
     }
 
@@ -65,11 +62,11 @@ class World {
             this.throwableObjects.push(bottle);
             this.hudBottles.splice(0, 1);
             setInterval(() => {
-                if (bottle.isColliding(this.endboss)) {
-                    this.endboss.bottleHit();
+                if (bottle.isColliding(this.endboss) && !this.endboss.isHurt()) {
+                    this.endboss.hit(5);
                 }
                 if (bottle.isColliding(this.miniEndboss)) {
-                    this.miniEndboss.bottleHit();
+                    this.miniEndboss.hit(25);
                 }
             }, 100);
         }
@@ -79,7 +76,8 @@ class World {
         setInterval(() => {
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy) && !this.character.isAboveGround()) {
-                    this.character.hit();
+                    this.character.hit(0.5);
+                    console.log(this.character.energy);
                     this.statusbar.setPercentage(this.character.energy);
                 }
             })
@@ -99,6 +97,7 @@ class World {
             })
         }, 100);
     }
+
 
     checkCollectingCoins() {
         setInterval(() => {
@@ -128,11 +127,11 @@ class World {
             if (this.camera_x <= -2620) {
                 this.endbossSeeCharacter = true;
 
-                if (this.endbossSeeCharacter == true && world.endboss.endbossEnergy == 100) {
+                if (this.endbossSeeCharacter == true && this.endboss.energy == 100) {
                     this.endbossAttack1();
-                } else if (this.endbossSeeCharacter == true && world.endboss.endbossEnergy <= 80 && world.endboss.endbossEnergy > 50) {
+                } else if (this.endbossSeeCharacter == true && this.endboss.energy <= 80 && this.endboss.energy > 50) {
                     this.endbossAttack2();
-                } else if (this.endbossSeeCharacter == true && world.endboss.endbossEnergy <= 50 && world.endboss.endbossEnergy > 0) {
+                } else if (this.endbossSeeCharacter == true && this.endboss.energy <= 50 && this.endboss.energy > 0) {
                     this.endbossAttack3();
                 }
             }
@@ -142,11 +141,9 @@ class World {
     checkEndbossDead() {
         setInterval(() => {
             this.level.enemies.forEach((enemy) => {
-                if (this.miniEndboss.alive == false) {
-                    setTimeout(() => {
-                        let index = this.level.enemies.indexOf(enemy);
-                        this.level.enemies.splice(index, 1);
-                    }, 500);
+                if (this.miniEndboss.isDead() && this.bottle.hit(enemy)) {
+                    let index = this.level.enemies.indexOf(enemy);
+                    this.level.enemies.splice(index, 1);
                 }
             })
         }, 100);
