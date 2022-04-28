@@ -87,7 +87,7 @@ class World {
     checkJumpOnHead() {
         setInterval(() => {
             this.level.enemies.forEach((enemy) => {
-                if (!enemy.isDead() && this.character.isColliding(enemy) && this.character.isAboveGround()) {
+                if (!enemy.isDead() && this.character.isColliding(enemy) && this.character.isAboveGround() && !enemy.isAboveGround()) {
                     enemy.instandKill();
                     setTimeout(() => {
                         let index = this.level.enemies.indexOf(enemy);
@@ -141,7 +141,7 @@ class World {
     checkEndbossDead() {
         setInterval(() => {
             this.level.enemies.forEach((enemy) => {
-                if (this.miniEndboss.isDead() && this.bottle.hit(enemy)) {
+                if (this.miniEndboss.isDead()) {
                     let index = this.level.enemies.indexOf(enemy);
                     this.level.enemies.splice(index, 1);
                 }
