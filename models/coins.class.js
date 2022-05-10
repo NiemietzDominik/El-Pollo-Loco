@@ -4,14 +4,12 @@ class Coin extends CollectableObject {
     height = 150;
     width = 150;
 
-    constructor() {
+    constructor(x, y) {
         super().loadImage('img/8.Coin/Moneda1.png');
-        this.spawnCoin();
+        this.x = x;
+        this.y = y;
     }
 
-    spawnCoin() {
-        this.x = 500 + Math.random(22342.3) * 1500;
-        this.y = 300 + Math.random() * 50;
-    }
+
 
 }

@@ -28,15 +28,17 @@
     <script src="models/bottle.class.js"></script>
     <script src="models/collected-bottles.class.js"></script>
     <script src="levels/level1.js"></script>
-
-
     <script src="js/game.js"></script>
 
+    <script> function fullscreenMode(){canvas.requestFullscreen();}</script>
 
 </head>
 
 <body onload="init()">
-    <h1>El Pollo Loco</h1>
+    <div id="startScreenBtn" class="startBtnDiv"><button onclick="initlevel(), fullscreenMode()" class="startBtn">Start Game!</button></div>
+
+    <img id="startScreen" class="startScreen" src="img/9.Intro _ Outro Image/Start Screen/Opción 1.png">
+    
 
     <canvas id="canvas" height="480" width="720"></canvas>
 
@@ -46,6 +48,8 @@
         <div class="tutorialDiv">Space: Jump</div>
         <div class="tutorialDiv">D: Throw Bottle</div>
     </Div>
+
+    <div class="infoBox">Sammel genug Tabasco-flaschen auf, um den Endgegner zu besiegen!!!</div>
 </body>
 
 </html>

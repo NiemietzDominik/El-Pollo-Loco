@@ -1,15 +1,16 @@
-body{
-    display: flex;
+body {
+  display: flex;
   flex-direction: column;
-    align-items: center;
+  align-items: center;
+  background-color: rgb(153 68 9);
 }
 
-canvas{
-    background-color: black;
-   
+canvas {
+  background-color: black;
+
 }
 
-.tutorialContainer{
+.tutorialContainer {
   width: 70%;
   display: flex;
   justify-content: space-between;
@@ -17,25 +18,67 @@ canvas{
   margin-top: 10px;
 }
 
-.tutorialDiv{
+.tutorialDiv {
   margin: 5px;
   border: 3px solid black;
   border-color: sandybrown;
   padding: 10px;
+  background: #e5893f;
+}
+
+.infoBox {
+  margin: 30px;
+  border: 3px solid black;
+  border-color: sandybrown;
+  padding: 10px;
+  background: #e5893f;
+}
+
+.startScreen {
+  position: absolute;
+  width: 720px;
+  height: 480px;
+}
+
+.startBtnDiv {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.startBtn {
+  font-size: 20px;
+  height: 50px;
+  width: 200px;
+  font-family: monospace;
+  color: black;
+  background-color: goldenrod;
+}
+
+.startBtn:hover {
+
+  background: #ffd400;
+  border-color: white;
+  transition: ease-in-out 225ms;
+}
+
+.hide {
+  display: none;
 }
 
 
 /* Smartphone*/
-@media only screen and (max-width: 720px){
-  canvas{
-    width:100%;
+@media only screen and (max-width: 720px) {
+  canvas {
+    width: 100%;
   }
 }
 
 /* Smartphone*/
-@media only screen and (max-height: 480px){
-  canvas{
-   height:100vh;
+@media only screen and (max-height: 480px) {
+  canvas {
+    height: 100vh;
   }
 }
-

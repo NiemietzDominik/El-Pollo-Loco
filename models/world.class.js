@@ -2,20 +2,22 @@ class World {
     backgroundMusic = new Audio('audio/backgroundMusic.mp3');
     coinSound = new Audio('audio/coin.mp3');
     bottleSound = new Audio('audio/bottle.mp3');
+
+    endscreen = new Image('img/9.Intro _ Outro Image/_Game over_ screen/3.Game over.png');
     character = new Character();
 
     level = level1;
 
-    endboss = this.level.enemies.find(e => e instanceof Endboss);
-    miniEndboss = this.level.enemies.find(em => em instanceof MiniEndboss);
+    endboss = this.level.enemies[20];
+    miniEndboss = this.level.enemies[19];
+    alive = true;
 
     statusbar = new Statusbar();
 
     hudCoins = [];
     hudBottles = [];
     throwableObjects = [];
-
-       endbossSeeCharacter = false;
+    endbossSeeCharacter = false;
     canvas;
     ctx;
     keyboard;
@@ -36,9 +38,10 @@ class World {
         this.throwBottle();
         this.checkEndbossDead();
         this.checkCollisions();
-        this.checkJumpOnHead();
-
+        this.endbossShrinking();
     }
+
+
 
     setWorld() {
         this.character.world = this;
@@ -56,14 +59,20 @@ class World {
         }, 200);
     }
 
+    showEndscreen() {
+        if (this.character.isDead()) {
+            this.addToMap(endscreen);
+        }
+    }
+
     checkThrowObjects() {
         if (this.keyboard.D && this.hudBottles.length > 0) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(bottle);
-            this.hudBottles.splice(0, 1);
+            this.hudBottles.splice(-1);
             setInterval(() => {
                 if (bottle.isColliding(this.endboss) && !this.endboss.isHurt()) {
-                    this.endboss.hit(5);
+                    this.endboss.hit(15);
                 }
                 if (bottle.isColliding(this.miniEndboss)) {
                     this.miniEndboss.hit(25);
@@ -80,14 +89,7 @@ class World {
                     console.log(this.character.energy);
                     this.statusbar.setPercentage(this.character.energy);
                 }
-            })
-        }, 2000);
-    }
-
-    checkJumpOnHead() {
-        setInterval(() => {
-            this.level.enemies.forEach((enemy) => {
-                if (!enemy.isDead() && this.character.isColliding(enemy) && this.character.isAboveGround() && !enemy.isAboveGround()) {
+                if (!(enemy instanceof Endboss) && !enemy.isDead() && this.character.isColliding(enemy) && this.character.isAboveGround() && !enemy.isAboveGround()) {
                     enemy.instandKill();
                     setTimeout(() => {
                         let index = this.level.enemies.indexOf(enemy);
@@ -95,9 +97,8 @@ class World {
                     }, 500);
                 }
             })
-        }, 100);
+        }, 1000);
     }
-
 
     checkCollectingCoins() {
         setInterval(() => {
@@ -124,7 +125,7 @@ class World {
 
     checkEndbossSeeCharacter() {
         setInterval(() => {
-            if (this.camera_x <= -2620) {
+            if (this.camera_x <= -5300 && !this.endboss.isDead()) {
                 this.endbossSeeCharacter = true;
 
                 if (this.endbossSeeCharacter == true && this.endboss.energy == 100) {
@@ -135,47 +136,62 @@ class World {
                     this.endbossAttack3();
                 }
             }
-        }, 3000);
+        }, 1000);
     }
 
     checkEndbossDead() {
         setInterval(() => {
-            this.level.enemies.forEach((enemy) => {
-                if (this.miniEndboss.isDead()) {
-                    let index = this.level.enemies.indexOf(enemy);
-                    this.level.enemies.splice(index, 1);
+            if (this.miniEndboss.isDead()) {
+                this.miniEndboss.speedY = 15;
+            }
+            if (this.endboss.isDead()) {
+                this.endboss.y = 100;
+                this.endbossShrinking();
+                if (this.endboss.width <= 0) {
+                    this.level.enemies.forEach(enemy => {
+                        let index = this.level.enemies.indexOf(enemy);
+                        this.level.enemies.splice(index, 1);
+                        this.showEndscreen(this.endscreeen);
+                    });
                 }
-            })
-        }, 100);
+            }
+        }, 100)
+    }
+
+    endbossShrinking() {
+        if (this.endboss.height && this.endboss.width > 0) {
+            this.endboss.height -= 35;
+            this.endboss.width -= 20;
+            this.endboss.x += 15;
+        }
     }
 
     endbossAttack1() {
         console.log('attack 1')
-        this.spawnMiniChickens(8000, 3, 380);
-        this.spawnMiniChickens(7800, 4, 380);
         this.spawnMiniChickens(8000, 5, 380);
+        this.spawnMiniChickens(7800, 7, 380);
+        this.spawnMiniChickens(8000, 8, 380);
     }
 
     endbossAttack2() {
         console.log('attack 2')
-        this.spawnMiniChickens(8030, 5, 380);
-        this.spawnMiniChickens(8050, 5, 380);
-        this.spawnMiniChickens(7800, 7, 340);
-        this.spawnMiniChickens(7800, 7, 250);
+        this.spawnMiniChickens(8030, 6, 380);
+        this.spawnMiniChickens(8050, 6, 380);
+        this.spawnMiniChickens(7800, 8, 340);
+        this.spawnMiniChickens(7800, 8, 250);
     }
 
     endbossAttack3() {
         console.log('attack 3')
-        this.spawnMiniChickens(8030, 5, 280);
-        this.spawnMiniChickens(8050, 5, 300);
-        this.spawnMiniChickens(8070, 5, 320);
-        this.spawnMiniChickens(8090, 5, 340);
+        this.spawnMiniChickens(8030, 7, 280);
+        this.spawnMiniChickens(8050, 7, 300);
+        this.spawnMiniChickens(8070, 7, 320);
+        this.spawnMiniChickens(8090, 7, 340);
 
-
-        this.spawnMiniChickens(8130, 7, 380);
-        this.spawnMiniChickens(8150, 7, 380);
-        this.spawnMiniChickens(8170, 7, 380);
-        this.spawnMiniChickens(8190, 7, 380);
+        this.spawnMiniChickens(8130, 9, 380);
+        this.spawnMiniChickens(8150, 9, 380);
+        this.spawnMiniChickens(8170, 9, 380);
+        this.spawnMiniChickens(8190, 9, 380);
 
     }
 
@@ -219,6 +235,11 @@ class World {
         requestAnimationFrame(function () {
             self.draw();
         });
+    }
+
+    showEndscreen(endscreen) {
+        this.img = new Image();
+        this.img.src = endscreen;
     }
 
     addObjectsToMap(objects) {

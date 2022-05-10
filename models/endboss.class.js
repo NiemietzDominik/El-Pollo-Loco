@@ -5,7 +5,9 @@ class Endboss extends MovableObject {
     y = -100;
     hurtSound = new Audio('audio/endboss_hurt.mp3');
     deadSound = new Audio('audio/endboss_death.mp3');
+    soundvol = 0.4;
     
+
 
 
     IMAGES_ALERT = [
@@ -48,25 +50,21 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_ATTACK);
-        this.energy = 100;
-        this.x = 3100;
-   
+        this.x = 7200;
         this.animate();
-
     }
 
     animate() {
 
         setInterval(() => {
-            if(this.isDead()) {
+            if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
-                this.sound(this.deadSound, 0.4, 1);
-
-            } else if(this.isHurt()){
+                this.sound(this.deadSound, this.soundvol, 1.3);
+                setTimeout(() => this.soundvol = 0, 2500);
+            } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT)
-                console.log('hurt');
                 this.sound(this.hurtSound, 0.4, 1.4);
-            } else{
+            } else {
                 this.playAnimation(this.IMAGES_ATTACK)
             }
         }, 300);
