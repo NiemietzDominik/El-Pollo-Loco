@@ -5,8 +5,6 @@ class MiniEndboss extends Endboss {
     y = 200;
     speed = 2;
    
-    
-
     constructor(speed) {
         super();
         this.x = 1630;
@@ -20,10 +18,12 @@ class MiniEndboss extends Endboss {
     jumpAndRun() {
         setInterval(() => {
             this.moveLeft();
-            if (!this.isAboveGround()) {
+            if (!this.isAboveGround() && this.x > 0) {
                 this.jump();
             }
         }, 1000 / 60);
     }
+
+  
 
 }

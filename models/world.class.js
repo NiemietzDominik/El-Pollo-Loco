@@ -2,15 +2,15 @@ class World {
     backgroundMusic = new Audio('audio/backgroundMusic.mp3');
     coinSound = new Audio('audio/coin.mp3');
     bottleSound = new Audio('audio/bottle.mp3');
-
-    endscreen = new Image('img/9.Intro _ Outro Image/_Game over_ screen/3.Game over.png');
     character = new Character();
+    endscreen = ['img/9.Intro _ Outro Image/_Game over_ screen/4.Game over!.png'];
 
     level = level1;
 
     endboss = this.level.enemies[20];
     miniEndboss = this.level.enemies[19];
     alive = true;
+    
 
     statusbar = new Statusbar();
 
@@ -39,6 +39,7 @@ class World {
         this.checkEndbossDead();
         this.checkCollisions();
         this.endbossShrinking();
+        this.showEndscreen();
     }
 
 
@@ -125,7 +126,7 @@ class World {
 
     checkEndbossSeeCharacter() {
         setInterval(() => {
-            if (this.camera_x <= -5300 && !this.endboss.isDead()) {
+            if (this.camera_x <= -5300 && !this.endboss.isDead() && !this.character.isDead()) {
                 this.endbossSeeCharacter = true;
 
                 if (this.endbossSeeCharacter == true && this.endboss.energy == 100) {
@@ -151,12 +152,12 @@ class World {
                     this.level.enemies.forEach(enemy => {
                         let index = this.level.enemies.indexOf(enemy);
                         this.level.enemies.splice(index, 1);
-                        this.showEndscreen(this.endscreeen);
                     });
                 }
             }
         }, 100)
     }
+
 
     endbossShrinking() {
         if (this.endboss.height && this.endboss.width > 0) {
@@ -237,10 +238,20 @@ class World {
         });
     }
 
-    showEndscreen(endscreen) {
-        this.img = new Image();
-        this.img.src = endscreen;
+    showEndscreen() {
+        setInterval(() => {
+            if (this.endboss.isDead() || this.character.isDead()) {
+                document.getElementById('endScreen').classList.remove('hide');
+                document.getElementById('endScreen').classList.add('startScreen');
+                document.getElementById('replay').classList.remove('hide');
+                document.getElementById('replay').classList.add('replay');
+                setTimeout(() => this.level.enemies.length = 0, 1500)
+
+            }
+
+        }, 500);
     }
+
 
     addObjectsToMap(objects) {
         objects.forEach(o => {
