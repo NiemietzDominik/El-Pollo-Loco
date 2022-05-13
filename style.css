@@ -2,7 +2,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgb(153 68 9);
+  background-image: url('img/background.jpg');
 }
 
 canvas {
@@ -11,20 +11,54 @@ canvas {
 
 }
 
-.tutorialContainer {
-  width: 70%;
+.hudContainer {
+
+  position: absolute;
+  top: 500px;
+  height: 168px;
+  flex-direction: column-reverse;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
+
 }
 
-.tutorialDiv {
-  margin: 5px;
-  border: 3px solid black;
-  border-color: sandybrown;
-  padding: 10px;
-  background: #e5893f;
+.panelBody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  border: 2px solid #2c1b0e;
+
+  background-color: sandybrown;
+
+}
+
+.panelBody:hover {
+  cursor: pointer;
+  background-color: #fbc395;
+  transition: ease-in-out 125ms;
+}
+
+.panel {
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  align-items: center;
+}
+
+.panelCouple {
+  width: 113px;
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+
+.mobileBtn {
+  height: 30px;
+  width: 30px;
 }
 
 .infoBox {
@@ -33,6 +67,29 @@ canvas {
   border-color: sandybrown;
   padding: 10px;
   background: #e5893f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.fullScreenBtn {
+  margin: 30px;
+  border: 3px solid black;
+  border-color: sandybrown;
+  padding: 10px;
+  background: #e5893f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.fullScreenBtn:hover {
+  cursor: pointer;
+  background-color: #f5a35f;
+  opacity: 0.7;
+  transition: ease-in-out 125ms;
 }
 
 .replay {
@@ -102,9 +159,43 @@ canvas {
   canvas {
     width: 100%;
   }
+
   .startScreen {
     width: 100%;
     height: 480px;
+  }
+
+  .panelBody {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    border: 2px solid #e5893f;
+    background-color: sandybrown;
+  }
+
+  .panel {
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    align-items: center;
+  }
+
+  .panelCouple {
+    width: 113px;
+    margin: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .hudContainer {
+    position: absolute;
+    height: 680px;
+    width: 100%;
+    flex-direction: column-reverse;
+    display: flex;
   }
 }
 

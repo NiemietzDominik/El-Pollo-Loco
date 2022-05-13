@@ -1,4 +1,5 @@
 class World {
+    
     backgroundMusic = new Audio('audio/backgroundMusic.mp3');
     coinSound = new Audio('audio/coin.mp3');
     bottleSound = new Audio('audio/bottle.mp3');
@@ -6,9 +7,9 @@ class World {
     endscreen = ['img/9.Intro _ Outro Image/_Game over_ screen/4.Game over!.png'];
 
     level = level1;
-
     endboss = this.level.enemies[20];
     miniEndboss = this.level.enemies[19];
+
     alive = true;
     
 
@@ -40,6 +41,8 @@ class World {
         this.checkCollisions();
         this.endbossShrinking();
         this.showEndscreen();
+       
+       
     }
 
 
@@ -246,7 +249,6 @@ class World {
                 document.getElementById('replay').classList.remove('hide');
                 document.getElementById('replay').classList.add('replay');
                 setTimeout(() => this.level.enemies.length = 0, 1500)
-
             }
 
         }, 500);

@@ -4,6 +4,8 @@ function initlevel() {
     document.getElementById('startScreen').classList.add('hide');
     document.getElementById("startScreenBtn").classList.add('hide');
 
+
+
     level1 = new Level(
         [
             new Chicken(500, 1),
@@ -133,7 +135,8 @@ function initlevel() {
         ]
 
     )
-
 }
+
+
 
 
