@@ -4,6 +4,20 @@ class Character extends MovableObject {
     height = 250;
     world;
     gameOver = false;
+    mute = 0;
+
+    IMAGES_STANDING_STILL = [
+        'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-1.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-2.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-3.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-4.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-5.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-6.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-7.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-8.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-9.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-10.png'
+    ]
 
     IMAGES_DEAD = [
         'img/2.Secuencias_Personaje-Pepe-corrección/5.Muerte/D-51.png',
@@ -12,7 +26,6 @@ class Character extends MovableObject {
         'img/2.Secuencias_Personaje-Pepe-corrección/5.Muerte/D-54.png',
         'img/2.Secuencias_Personaje-Pepe-corrección/5.Muerte/D-55.png',
         'img/2.Secuencias_Personaje-Pepe-corrección/5.Muerte/D-56.png',
-        'img/2.Secuencias_Personaje-Pepe-corrección/5.Muerte/D-57.png',
     ]
 
     IMAGES_HURT = [
@@ -39,8 +52,7 @@ class Character extends MovableObject {
         'img/2.Secuencias_Personaje-Pepe-corrección/3.Secuencia_salto/J-36.png',
         'img/2.Secuencias_Personaje-Pepe-corrección/3.Secuencia_salto/J-37.png',
         'img/2.Secuencias_Personaje-Pepe-corrección/3.Secuencia_salto/J-38.png',
-        'img/2.Secuencias_Personaje-Pepe-corrección/3.Secuencia_salto/J-39.png',
-        'img/2.Secuencias_Personaje-Pepe-corrección/3.Secuencia_salto/J-40.png'
+        'img/2.Secuencias_Personaje-Pepe-corrección/3.Secuencia_salto/J-39.png'
     ]
 
 
@@ -50,6 +62,7 @@ class Character extends MovableObject {
 
     constructor() {
         super().loadImage('img/2.Secuencias_Personaje-Pepe-corrección/2.Secuencia_caminata/W-21.png');
+        this.loadImages(this.IMAGES_STANDING_STILL);
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_DEAD);
@@ -81,30 +94,28 @@ class Character extends MovableObject {
 
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
                 this.jump();
-                
+
             }
         }, 1000 / 60);
 
 
         setInterval(() => {
 
-            if (this.isDead()) {
-                 this.scream_sound.volume = 0.05;
-        
-                    this.scream_sound.play();
-                    this.gameOver = true;
-                 
-                
-
+            if (this.isDead() && this.gameOver == false) {
+                this.scream_sound.volume = 0.05;
+                this.scream_sound.play();
+                this.gameOver = true;
                 this.playAnimation(this.IMAGES_DEAD);
-            } else if (this.isHurt()) {
+            } else if (this.world.keyboard.RIGHT == false && this.world.keyboard.LEFT == false && !this.isAboveGround == false && this.world.keyboard.D == false && this.isHurt() == false && this.gameOver == false) {
+                this.playAnimation(this.IMAGES_STANDING_STILL);
+            } else if (this.isHurt() && this.gameOver == false) {
                 this.hit_sound.play();
                 this.playAnimation(this.IMAGES_HURT);
             }
-            else if (this.isAboveGround()) {
+            else if (this.isAboveGround() && this.gameOver == false) {
                 this.playAnimation(this.IMAGES_JUMPING);
             } else {
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT && !this.isAboveGround()) {
+                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT && !this.isAboveGround() && this.gameOver == false) {
                     this.playAnimation(this.IMAGES_WALKING);
                 }
             }

@@ -10,6 +10,40 @@ function init() {
     
 }
 
+function touchBtn() {
+    document.getElementById('btnLeft').addEventListener('touchstart', (e) => {
+        keyboard.LEFT = true;
+    });
+
+    document.getElementById('btnLeft').addEventListener('touchend', (e) => {
+        keyboard.LEFT = false;
+    });
+
+    document.getElementById('btnRight').addEventListener('touchstart', (e) => {
+        keyboard.RIGHT = true;
+    });
+
+    document.getElementById('btnRight').addEventListener('touchend', (e) => {
+        keyboard.RIGHT = false;
+    });
+
+    document.getElementById('btnJump').addEventListener('touchstart', (e) => {
+        keyboard.SPACE = true;
+    });
+
+    document.getElementById('btnJump').addEventListener('touchend', (e) => {
+        keyboard.SPACE = false;
+    });
+
+    document.getElementById('btnThrow').addEventListener('touchstart', (e) => {
+        keyboard.D = true;
+    });
+
+    document.getElementById('btnThrow').addEventListener('touchend', (e) => {
+        keyboard.D = false;
+    });
+}
+
 window.addEventListener("keydown", (e) => {
     if (e.keyCode == 39) {
         keyboard.RIGHT = true;
@@ -56,13 +90,19 @@ window.addEventListener("keyup", (e) => {
 
 });
 
+
+
+
+
+
+
 function fullscreenMode() {
-    this.canvas.requestFullscreen(); 
+    this.canvas.requestFullscreen();
     canvas = document.getElementById("canvas");
     initlevel();
     world = new World(canvas, keyboard);
 }
-function endScreenFullScreen(){
+function endScreenFullScreen() {
     document.getElementById("endScreen").requestFullscreen();
 }
 function reloadPage() {

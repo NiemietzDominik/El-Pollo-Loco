@@ -17,7 +17,6 @@
     <script src="models/mini-chicken.class.js"></script>
     <script src="models/character.class.js"></script>
     <script src="models/background-object.class.js"></script>
-    <script src="models/keyboard.class.js"></script>
     <script src="models/level.class.js"></script>
     <script src="models/endboss.class.js"></script>
     <script src="models/mini-endboss.class.js"></script>
@@ -28,7 +27,9 @@
     <script src="models/collected-bottles.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="models/world.class.js"></script>
+    <script src="models/keyboard.class.js"></script>
     <script src="js/game.js"></script>
+ 
 
     <script>
       
@@ -49,17 +50,20 @@
     <canvas id="canvas" height="480" width="720"></canvas>
 
     <Div class="hudContainer">
-        <div class="infoBox">Sammel genügend(am besten alle) Tabasco-Flaschen auf, um den Endgegner zu besiegen!!!</div>
+        <div class="infoBox">Sammel genügend (am besten alle) Tabasco-Flaschen auf, um den Endgegner zu besiegen!!!</div>
         <div class="panel">
+
+            <div onclick="fullscreenMode()" class="fullScreenBtn">FULLSCREEN MODE</div>
+
             <div class="panelCouple">
-                <div class="panelBody"><img class="mobileBtn" src="Img/mobileImg/arrow-left.png" alt="arrow-left"></div>
-                <div class="panelBody"><img class="mobileBtn" src="img/mobileImg/arrow-right.png" alt="arrow-right">
+                <div id="btnLeft" class="panelBody"><img class="mobileBtn" src="Img/mobileImg/arrow-left.png" alt="arrow-left"></div>
+                <div id="btnRight" class="panelBody"><img class="mobileBtn" src="img/mobileImg/arrow-right.png" alt="arrow-right">
                 </div>
             </div>
-            <div onclick="fullscreenMode()" class="fullScreenBtn">FULLSCREEN MODE</div>
+           
             <div class="panelCouple">
-                <div class="panelBody"><img class="mobileBtn" src="img/mobileImg/arrow-up.png" alt="arrow-up"></div>
-                <div class="panelBody"><img class="mobileBtn" src="img/mobileImg/throwBtn.png" alt="D"></div>
+                <div id="btnJump" class="panelBody"><img class="mobileBtn" src="img/mobileImg/space.png" alt="arrow-up"></div>
+                <div id="btnThrow" class="panelBody">D</div>
             </div>
 
         </div>
